@@ -125,6 +125,8 @@ public class Main4 {
         System.out.println("car = " + car);
         System.out.println("engine = " + engine);
         System.out.println("door = " + door);
+        System.out.println("door = " + door);
+        System.out.println("door = " + door);
 
         }
     }
