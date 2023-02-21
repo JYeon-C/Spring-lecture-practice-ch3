@@ -70,7 +70,6 @@ public class Main3 {
         System.out.println("car = " + car);
         System.out.println("car2 = " + car2);
         System.out.println("engine = " + engine);
-        System.out.println("engine = " + engine);
 
     }
 }
