@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import static org.junit.Assert.assertTrue;
@@ -118,6 +119,41 @@ public class DBConnectionTest2Test {
         pstmt.executeUpdate(); // insert, delete, update
     }
 
+    @Test
+    public void transactionTest() throws Exception{
+        Connection conn=null;
+        try {
+            deleteAll();
+            conn = ds.getConnection();
+            conn.setAutoCommit(false); // conn.setAutoCommit(true);
+
+            // 실행할 sql문 작성
+            String sql = "insert into user_info values (?,?,?,?,?,?,now())";
+
+            // sql문 실행
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "asdf"); // 첫번째 ?의 값을 user의 id로 채운다.
+            pstmt.setString(2, "1234"); // 두번째 ?의 값을 user의 id로 채운다.
+            pstmt.setString(3, "abc"); // 세번째 ?의 값을 user의 id로 채운다.
+            pstmt.setString(4, "abc@aaa.com"); // 네번째 ?의 값을 user의 id로 채운다.
+            pstmt.setDate(5, new java.sql.Date(new Date().getTime())); // 다섯번째 ?의 값을 user의 id로 채운다. Date는 sql Date
+            pstmt.setString(6, "fb"); // 여섯번째 ?의 값을 user의 id로 채운다.
+
+            // 쿼리 실행
+            int rowCnt = pstmt.executeUpdate(); // insert, delete, update
+
+            pstmt.setString(1, "asdf");
+            rowCnt = pstmt.executeUpdate();
+
+            conn.commit();
+
+        } catch (Exception e) {
+            conn.rollback();
+            e.printStackTrace();
+        } finally {
+        }
+    }
+
 
     // 사용자 정보를 user_info테이블에 저장하는 메서드
     public int insertUser(User user) throws Exception {
@@ -143,7 +179,6 @@ public class DBConnectionTest2Test {
 
         return rowCnt;
     }
-
     @Test
     public void springJdbcConnectTest() throws Exception{
 //        ApplicationContext ac = new GenericXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/**/root-context.xml");
