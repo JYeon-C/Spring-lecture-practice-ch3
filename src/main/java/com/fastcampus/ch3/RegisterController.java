@@ -48,13 +48,13 @@ public class RegisterController {
         // User객체를 검증한 결과 에러가 있으면, registerForm을 이용해서 에러를 보여줘야 함.
         if(!result.hasErrors()) { // 정보가 없다면
             // 2. DB에 신규회원 정보를 저장
-            int rowCnt = userDao.insertUser(user);
+            int rowCnt = userDao.insertUser(user); // 에러가 없을 때만 저장
 
-            if(rowCnt!=FAIL) {
-                return "registerForm";
+            if(rowCnt!=FAIL) { // 실패가 아니면 가입정보를 보여준다.
+                return "registerInfo";
             }
         }
-        return "registerForm";
+        return "registerForm"; // 실패하면 registerForm을 보여준다.
     }
 
     private boolean isValid(User user) {
